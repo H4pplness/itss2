@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class TitleAppbar extends StatelessWidget implements PreferredSizeWidget {
   Function()? leadingButtonOnPressed;
   Widget? title;
-  TitleAppbar({Key? key, this.leadingButtonOnPressed,this.title}) : super(key: key);
+  List<Widget>? actions;
+  TitleAppbar({Key? key, this.leadingButtonOnPressed,this.title,this.actions}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      actions: actions,
       backgroundColor: Theme.of(context).primaryColor,
       elevation: Theme.of(context).appBarTheme.elevation,
       leading: IconButton(

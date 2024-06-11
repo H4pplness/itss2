@@ -1,21 +1,38 @@
-class BookCourseDTO {
-  String? sport;
-  String? course;
-  DateTime? time;
 
-  BookCourseDTO({this.sport,this.course,this.time});
+
+import 'package:itss2/models/booking.dart';
+import 'package:itss2/models/sport-field.dart';
+import 'package:itss2/models/sport.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'book_course_notifier.g.dart';
+
+class BookFieldDTO {
+  Sport? sport;
+  SportField? field;
+  Booking? booking;
+
+  BookFieldDTO({this.sport, this.field, this.booking});
 }
 
 
-// class BookCourseNotifier extends _$BookCourseNotifier {
-//   @override
-//   BookCourseDTO build(){
-//     return BookCourseDTO();
-//   }
-//
-//   void setSport(String? sport){
-//     state = BookCourseDTO(sport: sport??state.sport,course: state.course,time: state.time);
-//   }
-//
-//   void setCourse(String?)
-// }
+
+@riverpod
+class BookCourseNotifier extends _$BookCourseNotifier {
+  @override
+  BookFieldDTO build(){
+    return BookFieldDTO();
+  }
+
+  void setSport(Sport? sport){
+    state = BookFieldDTO(sport: sport,field: state.field, booking: state.booking);
+  }
+
+  void setField(SportField? field){
+    state = BookFieldDTO(sport: state.sport,field: field,booking: state.booking);
+  }
+
+  void setBooking(Booking? booking){
+    state = BookFieldDTO(sport: state.sport,field: state.field , booking: booking);
+  }
+}

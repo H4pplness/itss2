@@ -1,5 +1,6 @@
 
 import 'package:itss2/models/user.dart';
+import 'package:itss2/models/match.dart';
 
 class Booking {
   Match? match;
