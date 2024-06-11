@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itss2/screens/home_screen/home_screen.dart';
 import 'package:itss2/screens/login_screen/login_screen.dart';
 import 'package:itss2/screens/sport_type_screen/sport_type_screen.dart';
 import 'package:itss2/themes/dark_theme.dart';
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
         theme: lightTheme,
         themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
-        home: SportTypeScreen());
+        home: HomeScreen());
   }
 }
 

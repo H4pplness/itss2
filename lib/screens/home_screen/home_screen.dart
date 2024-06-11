@@ -29,9 +29,9 @@ class HomeScreen extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (context) => BookCourseScreen()));
                       },
-                      child: Row(
+                      child: const Row(
                         children: [
-                          Icon(Icons.saved_search),
+                          Icon(Icons.sports_soccer,color: Colors.white,),
                           SizedBox(
                             width: 15,
                           ),
@@ -93,26 +93,26 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  PrimaryCard(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => FindPlayerScreen()));
-                      },
-                      child: Row(
-                        children: [
-                          Icon(Icons.saved_search),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Text("Tìm đối nhanh",
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white))
-                        ],
-                      )),
+                  // PrimaryCard(
+                  //     onTap: () {
+                  //       Navigator.push(
+                  //           context,
+                  //           MaterialPageRoute(
+                  //               builder: (context) => FindPlayerScreen()));
+                  //     },
+                  //     child: Row(
+                  //       children: [
+                  //         Icon(Icons.saved_search),
+                  //         SizedBox(
+                  //           width: 15,
+                  //         ),
+                  //         Text("Tìm đối nhanh",
+                  //             style: TextStyle(
+                  //                 fontSize: 20,
+                  //                 fontWeight: FontWeight.w600,
+                  //                 color: Colors.white))
+                  //       ],
+                  //     )),
                 ],
               ),
             ),

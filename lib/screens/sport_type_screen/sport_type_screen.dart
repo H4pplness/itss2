@@ -14,7 +14,7 @@ class SportTypeScreen extends ConsumerWidget {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
-            child: SportTypeCard(prefixIcon: Icon(Icons.sports_baseball,color: Colors.white,size: 30,),title: "Bóng đá",),
+            child: SportTypeCard(prefixIcon: Icon(Icons.sports_soccer,color: Colors.white,size: 30,),title: "Bóng đá",),
           ),
           SizedBox(height: 10),
           Padding(
