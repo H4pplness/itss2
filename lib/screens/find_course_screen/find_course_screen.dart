@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:itss2/models/sport-field.dart';
 import 'package:itss2/widgets/atoms/buttons/primarybutton.dart';
 import 'package:itss2/widgets/organisms/app_bars/title_appbar.dart';
+import 'package:itss2/widgets/sport_field_card.dart';
 
 class FindCourseScreen extends StatefulWidget {
   const FindCourseScreen({super.key});
@@ -14,6 +16,7 @@ class FindCourseScreen extends StatefulWidget {
 
 class _FindCourseScreenState extends State<FindCourseScreen> {
   late String choice;
+  List<SportField> sportFieldResults = <SportField>[];
 
   List<String> listChoice = [
     "Bóng đá",
@@ -22,41 +25,35 @@ class _FindCourseScreenState extends State<FindCourseScreen> {
   ];
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
     setState(() {
       choice = "Chọn môn thể thao";
     });
   }
 
-  _buildBottomModal(BuildContext context)
-  {
+  _buildBottomModal(BuildContext context) {
     List<Widget> widgets = [];
 
     listChoice.forEach((element) {
-      widgets.add(
-          PrimaryButton(
-              onPressed: (){
-                setState(() {
-                  choice = element;
-                });
-                Navigator.pop(context);
-              },
-              width: MediaQuery.of(context).size.width,
-              child: Text(element,
-                style: TextStyle(color: Colors.white, fontSize: 18.0),
-              )
-          )
-      );
-      widgets.add(
-          SizedBox(height: 5)
-      );
+      widgets.add(PrimaryButton(
+          onPressed: () {
+            setState(() {
+              choice = element;
+            });
+            Navigator.pop(context);
+          },
+          width: MediaQuery.of(context).size.width,
+          child: Text(
+            element,
+            style: TextStyle(color: Colors.white, fontSize: 18.0),
+          )));
+      widgets.add(SizedBox(height: 5));
     });
 
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height*0.7,
+      height: MediaQuery.of(context).size.height * 0.7,
       child: SingleChildScrollView(
         child: Column(
           children: widgets,
@@ -65,8 +62,7 @@ class _FindCourseScreenState extends State<FindCourseScreen> {
     );
   }
 
-  _buildSearchDialog(BuildContext context)
-  {
+  _buildSearchDialog(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: Container(
@@ -74,7 +70,7 @@ class _FindCourseScreenState extends State<FindCourseScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8.0),
         ),
-        padding: EdgeInsets.symmetric(horizontal: 16.0,vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -84,15 +80,18 @@ class _FindCourseScreenState extends State<FindCourseScreen> {
             ),
             SizedBox(height: 20),
             CircularProgressIndicator(),
-            SizedBox(height: 16,),
+            SizedBox(
+              height: 16,
+            ),
             PrimaryButton(
               width: 100,
               child: Center(
-                child: Text("Hủy",
+                child: Text(
+                  "Hủy",
                   style: TextStyle(color: Colors.black, fontSize: 18.0),
                 ),
               ),
-              onPressed: (){
+              onPressed: () {
                 Navigator.pop(context);
               },
             )
@@ -113,58 +112,86 @@ class _FindCourseScreenState extends State<FindCourseScreen> {
               textStyle: TextStyle(color: Colors.white, letterSpacing: .5)),
         ),
       ),
-      body: Container(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Column(
-              children: [
-                Text('Môn thể thao :',
-                    style: GoogleFonts.notoSans(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black)),
-                PrimaryButton(
-                    onPressed: (){
+      body: SingleChildScrollView(
+        child: SizedBox(
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text('Môn thể thao :',
+                      style: GoogleFonts.notoSans(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black)),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  PrimaryButton(
+                    onPressed: () {
                       showModalBottomSheet(
-                          context: context,
-                          builder: (context) => _buildBottomModal(context)
+                        context: context,
+                        builder: (context) => _buildBottomModal(context),
                       );
                     },
-                    child: Text(choice,
-                        style: GoogleFonts.notoSans(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white))
+                    child: Text(
+                      choice,
+                      style: GoogleFonts.notoSans(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Ink(
+                    decoration: ShapeDecoration(
+                      color: Theme.of(context).primaryColor,
+                      shape: const CircleBorder(),
+                    ),
+                    child: IconButton(
+                      padding: EdgeInsets.all(20),
+                      icon: Icon(Icons.search),
+                      color: Colors.white,
+                      onPressed: () {
+                        setState(() {
+                          sportFieldResults = <SportField>[];
+                        });
+                        showDialog(
+                            context: context,
+                            builder: (context) => _buildSearchDialog(context));
 
-                ),
-              ],
-            ),
-            Ink(
-              decoration: ShapeDecoration(
-                color: Theme.of(context).primaryColor,
-                shape: const CircleBorder(),
+                        Future.delayed(const Duration(seconds: 3), () {
+                          Navigator.pop(context);
+                          setState(() {
+                            sportFieldResults = listSportField;
+                          });
+                        });
+                      },
+                      iconSize: 150, // Adjust icon size to fit inside circle
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Column(
+                    children: sportFieldResults
+                        .where((f) => f.sport!.name == choice)
+                        .map((f) => SportFieldCard(field: f))
+                        .toList(),
+                  ),
+                ],
               ),
-              child: IconButton(
-                padding: EdgeInsets.all(20),
-                icon: Icon(Icons.search),
-                color: Colors.white,
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) => _buildSearchDialog(context)
-                  );
-                },
-                iconSize: 150, // Adjust icon size to fit inside circle
-              ),
-            ),
-            SizedBox(height: 5,),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
-
