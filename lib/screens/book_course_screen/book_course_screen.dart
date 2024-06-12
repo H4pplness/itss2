@@ -181,6 +181,26 @@ class _BookCourseScreenState extends ConsumerState<BookCourseScreen> {
                 ),
               ],
             ),
+            // const SizedBox(height: 5),
+            // Row(
+            //   children: [
+            //     PrimaryButton(
+            //       onPressed: (){
+            //         // showModalBottomSheet(
+            //         //     context: context,
+            //         //     builder: (context){
+            //         //       return _buildListMatch(context);
+            //         //     }
+            //         // );
+            //       },
+            //       width: MediaQuery.of(context).size.width*0.8,
+            //       child: Text("Cần tìm thêm đối không ?",
+            //           style: GoogleFonts.notoSans(
+            //               textStyle:
+            //               TextStyle(color: Colors.white, letterSpacing: .5,fontWeight: FontWeight.w600,fontSize: 15))),
+            //     ),
+            //   ],
+            // ),
           ],
         ),
       ),
