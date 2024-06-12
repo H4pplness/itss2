@@ -1,21 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import '../../../apis/get_field_bookings/get_field_bookings.dart';
 import '../../../widgets/atoms/cards/primary_card.dart';
 import '../../book_course_screen/book_course_screen.dart';
 
 class BookFieldTab extends ConsumerWidget {
-  const BookFieldTab({super.key});
+  BookFieldTab({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bookings = ref.watch(getFieldBookingProvider);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             PrimaryCard(
                 onTap: () {
                   Navigator.push(
@@ -25,7 +29,10 @@ class BookFieldTab extends ConsumerWidget {
                 },
                 child: const Row(
                   children: [
-                    Icon(Icons.sports_soccer,color: Colors.white,),
+                    Icon(
+                      Icons.sports_soccer,
+                      color: Colors.white,
+                    ),
                     SizedBox(
                       width: 15,
                     ),
@@ -36,6 +43,56 @@ class BookFieldTab extends ConsumerWidget {
                             color: Colors.white))
                   ],
                 )),
+            bookings.when(
+                data: (bookings) {
+                  return Column(
+                    children: bookings!
+                        .map((booking) => Container(
+                              margin: const EdgeInsets.only(top: 10),
+                              width: MediaQuery.of(context).size.width - 40,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    booking.fieldName!,
+                                    style: GoogleFonts.montserrat(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white),
+                                  ),
+                                  Text(booking.location!,
+                                      style: GoogleFonts.montserrat(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white)),
+                                  Text(
+                                      "${booking.startTime} - ${booking.endTime}",
+                                      style: GoogleFonts.montserrat(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white)),
+                                  Text(booking.date!,
+                                      style: GoogleFonts.montserrat(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.white))
+                                ],
+                              ),
+                            ))
+                        .toList(),
+                  );
+                },
+                error: (error, __) {
+                  print(error);
+                  return Container();
+                },
+                loading: () => Container())
           ],
         ),
       ),

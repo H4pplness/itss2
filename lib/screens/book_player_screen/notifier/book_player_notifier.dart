@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:itss2/models/player_booking.dart';
-import 'package:itss2/models/sport.dart';
-import 'package:itss2/models/user.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'book_player_notifier.g.dart';
+
+class PlayerBooking{
+  String? userId;
+  String? sport;
+  String? startTime;
+  String? endTime;
+  bool needField;
+  String? date;
+
+  PlayerBooking({this.userId, this.sport, this.startTime, this.endTime,
+      this.needField = false, this.date});
+}
 
 @riverpod
 class BookPlayerNotifier extends _$BookPlayerNotifier {
@@ -13,9 +22,9 @@ class BookPlayerNotifier extends _$BookPlayerNotifier {
     return PlayerBooking();
   }
 
-  void setSport(Sport sport) {
+  void setSport(String? sport) {
     state = PlayerBooking(
-        user: state.user,
+        userId: state.userId,
         sport: sport,
         startTime: state.startTime,
         endTime: state.endTime,
@@ -23,9 +32,9 @@ class BookPlayerNotifier extends _$BookPlayerNotifier {
         date: state.date);
   }
 
-  void setUser(User user) {
+  void setUser(String userId) {
     state = PlayerBooking(
-        user: user,
+        userId: userId,
         sport: state.sport,
         startTime: state.startTime,
         endTime: state.endTime,
@@ -35,7 +44,7 @@ class BookPlayerNotifier extends _$BookPlayerNotifier {
 
   void setNeedField(bool needField) {
     state = PlayerBooking(
-        user: state.user,
+        userId: state.userId,
         sport: state.sport,
         startTime: state.startTime,
         endTime: state.endTime,
@@ -43,9 +52,9 @@ class BookPlayerNotifier extends _$BookPlayerNotifier {
         date: state.date);
   }
 
-  void setStartTime(TimeOfDay time) {
+  void setStartTime(String? time) {
     state = PlayerBooking(
-        user: state.user,
+        userId: state.userId,
         sport: state.sport,
         startTime: time,
         endTime: state.endTime,
@@ -53,9 +62,9 @@ class BookPlayerNotifier extends _$BookPlayerNotifier {
         date: state.date);
   }
 
-  void setEndTime(TimeOfDay time) {
+  void setEndTime(String? time) {
     state = PlayerBooking(
-        user: state.user,
+        userId: state.userId,
         sport: state.sport,
         startTime: state.startTime,
         endTime: time,
@@ -64,9 +73,9 @@ class BookPlayerNotifier extends _$BookPlayerNotifier {
     );
   }
 
-  void setDate(DateTime date){
+  void setDate(String date){
     state = PlayerBooking(
-        user: state.user,
+        userId: state.userId,
         sport: state.sport,
         startTime: state.startTime,
         endTime: state.endTime,

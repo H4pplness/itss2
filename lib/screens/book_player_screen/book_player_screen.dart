@@ -24,7 +24,7 @@ class _BookPlayerScreenState extends ConsumerState<BookPlayerScreen> {
     listSport.forEach((sport) {
       sportComponents.add(PrimaryButton(
           onPressed: () {
-            ref.read(bookPlayerNotifierProvider.notifier).setSport(sport);
+            ref.read(bookPlayerNotifierProvider.notifier).setSport(sport.name);
             Navigator.pop(context);
           },
           child: Text(
@@ -89,7 +89,7 @@ class _BookPlayerScreenState extends ConsumerState<BookPlayerScreen> {
               },
               width: MediaQuery.of(context).size.width * 0.8,
               child: Text(
-                  bookPlayerNotifier?.sport?.name ?? "Chọn môn thể thao",
+                  bookPlayerNotifier?.sport?? "Chọn môn thể thao",
                   style: GoogleFonts.notoSans(
                       textStyle: const TextStyle(
                           color: Colors.white,
@@ -101,11 +101,11 @@ class _BookPlayerScreenState extends ConsumerState<BookPlayerScreen> {
             PrimaryButton(
               onPressed: () async {
                 final date = await showDatePicker(context: context, firstDate: DateTime(2024), lastDate: DateTime(2025));
-                ref.read(bookPlayerNotifierProvider.notifier).setDate(date!);
+                ref.read(bookPlayerNotifierProvider.notifier).setDate(DateFormat('yyyy-MM-dd').format(date!));
                 },
               width: MediaQuery.of(context).size.width * 0.8,
               child: Text(
-                  bookPlayerNotifier?.date!=null ? DateFormat('dd/MM/yyyy').format(bookPlayerNotifier.date!) :
+                  bookPlayerNotifier.date??
                       "Chọn ngày",
                   style: GoogleFonts.notoSans(
                       textStyle: const TextStyle(
@@ -120,13 +120,13 @@ class _BookPlayerScreenState extends ConsumerState<BookPlayerScreen> {
                 final startTime = await showTimePicker(
                     initialEntryMode: TimePickerEntryMode.dialOnly,
                     context: context,
-                    initialTime: TimeOfDay(hour: 0, minute: 0));
-                ref.read(bookPlayerNotifierProvider.notifier).setStartTime(startTime!);
+                    initialTime: const TimeOfDay(hour: 0, minute: 0));
+                ref.read(bookPlayerNotifierProvider.notifier).setStartTime("${startTime!.hour}:${startTime.minute}");
               },
               width: MediaQuery.of(context).size.width * 0.8,
               child: Text(
                   bookPlayerNotifier?.startTime == null ?
-                  "Chọn thời gian bắt đầu" : bookPlayerNotifier.startTime!.format(context),
+                  "Chọn thời gian bắt đầu" : bookPlayerNotifier.startTime!,
                   style: GoogleFonts.notoSans(
                       textStyle: const TextStyle(
                           color: Colors.white,
@@ -141,12 +141,12 @@ class _BookPlayerScreenState extends ConsumerState<BookPlayerScreen> {
                     initialEntryMode: TimePickerEntryMode.dialOnly,
                     context: context,
                     initialTime: TimeOfDay(hour: 0, minute: 0));
-                ref.read(bookPlayerNotifierProvider.notifier).setEndTime(endTime!);
+                ref.read(bookPlayerNotifierProvider.notifier).setEndTime("${endTime!.hour}:${endTime.minute}");
               },
               width: MediaQuery.of(context).size.width * 0.8,
               child: Text(
                   bookPlayerNotifier?.endTime == null ?
-                  "Chọn thời gian kết thúc" : bookPlayerNotifier.endTime!.format(context),
+                  "Chọn thời gian kết thúc" : bookPlayerNotifier.endTime!,
                   style: GoogleFonts.notoSans(
                       textStyle: const TextStyle(
                           color: Colors.white,

@@ -170,7 +170,7 @@ class _FindCourseScreenState extends State<FindCourseScreen> {
                         Future.delayed(const Duration(seconds: 3), () {
                           Navigator.pop(context);
                           setState(() {
-                            sportFieldResults = listSportField;
+                            // sportFieldResults = listSportField;
                           });
                         });
                       },

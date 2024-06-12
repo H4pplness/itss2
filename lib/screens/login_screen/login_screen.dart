@@ -13,7 +13,7 @@ class LoginScreen extends StatelessWidget {
       appBar: NonTitleAppBar(onPressed: (){}),
       body: Container(
         padding: const EdgeInsets.all(20),
-        child: const LoginTextField(),
+        child: LoginTextField(),
       ),
     );
   }

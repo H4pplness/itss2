@@ -13,7 +13,11 @@ class HomeTab extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(
+          child: Column(
+            children: [
 
+            ],
+          ),
         ),
       ),
     );

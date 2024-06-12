@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:itss2/screens/home_screen/home_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:itss2/screens/login_screen/login_screen.dart';
-import 'package:itss2/screens/sport_type_screen/sport_type_screen.dart';
+import 'package:itss2/storage/core/share_preferences.dart';
 import 'package:itss2/themes/dark_theme.dart';
 import 'package:itss2/themes/light_theme.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  runApp(const ProviderScope(child: MyApp()));
+  WidgetsFlutterBinding.ensureInitialized();
+  final sharedPreferences = await SharedPreferences.getInstance();
+  await dotenv.load(fileName: ".env");
+  runApp(ProviderScope(
+    overrides: [
+      sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+    ],
+    child: MyApp(),
+  ),);
 }
 
 class MyApp extends StatelessWidget {
@@ -22,7 +31,7 @@ class MyApp extends StatelessWidget {
         theme: lightTheme,
         themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
-        home: HomeScreen());
+        home: LoginScreen());
   }
 }
 

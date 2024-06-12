@@ -30,6 +30,8 @@ class _HomePageAppbarState extends State<HomePageAppbar> {
   }
 
   Future<void> _getCurrentLocation() async {
+    LocationPermission permission;
+    permission = await Geolocator.requestPermission();
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     setState(() {
@@ -41,37 +43,38 @@ class _HomePageAppbarState extends State<HomePageAppbar> {
   Widget build(BuildContext context) {
     return AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: GestureDetector(
-            onTap: () async {
-              // await _getCurrentLocation();
-              // print("LOCATION : ${currentPosition.latitude},${currentPosition.longitude}");
-              // await _openMap(currentPosition.latitude,currentPosition.longitude);
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) => GetLocationScreen(),
-                  transitionsBuilder:
-                      (context, animation, secondaryAnimation, child) {
-                    const begin = Offset(0.0, 1.0);
-                    const end = Offset.zero;
-                    const curve = Curves.ease;
+        centerTitle: true,
+        title: Padding(
+          padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*0.3),
+          child: GestureDetector(
+              onTap: () async {
+                await _getCurrentLocation();
+                print("LOCATION : ${currentPosition.latitude},${currentPosition.longitude}");
+                await _openMap(currentPosition.latitude,currentPosition.longitude);
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) => GetLocationScreen(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      const begin = Offset(0.0, 1.0);
+                      const end = Offset.zero;
+                      const curve = Curves.ease;
 
-                    var tween = Tween(begin: begin, end: end)
-                        .chain(CurveTween(curve: curve));
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
 
-                    return SlideTransition(
-                      position: animation.drive(tween),
-                      child: child,
-                    );
-                  },
-                ),
-              );
+                      return SlideTransition(
+                        position: animation.drive(tween),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
 
-            },
-            child: Center(
+              },
               child: Container(
                   padding: const EdgeInsets.only(left: 5),
-                  width: MediaQuery.of(context).size.width * 1 / 2,
                   child: Row(
                     children: [
                       Icon(
@@ -81,7 +84,7 @@ class _HomePageAppbarState extends State<HomePageAppbar> {
                       ),
                       SizedBox(width: 5),
                       Text("Bách Khoa",
-                          style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.black),
+                          style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500,color: Colors.white),
                           overflow: TextOverflow.ellipsis),
                       SizedBox(width: 5,),
                       Icon(
@@ -90,18 +93,9 @@ class _HomePageAppbarState extends State<HomePageAppbar> {
                         color: Colors.white,
                       )
                     ],
-                  )),
-            )
+                  ))
+          ),
         ),
-        leading: IconButton(
-            icon: IconTheme(
-                data: Theme.of(context).iconTheme,
-                child: const Icon(
-                  Icons.menu,
-                  size: 30,
-                  color: Colors.white,
-                )),
-            onPressed: () {}),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(48.0),
           child: Container(

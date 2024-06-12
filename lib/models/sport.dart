@@ -1,12 +1,12 @@
 class Sport {
-  int? id;
   String? name;
+  String? englishName;
 
-  Sport({this.id, this.name});
+  Sport({this.englishName, this.name});
 }
 
-Sport football = Sport(id: 1, name: "Bóng đá");
-Sport badminton = Sport(id: 2, name: "Cầu lông");
-Sport basketball = Sport(id: 3, name: "Bóng rổ");
+Sport football = Sport(name: "Bóng đá",englishName: "football");
+Sport badminton = Sport(name: "Cầu lông",englishName: "badminton");
+Sport basketball = Sport(name: "Bóng rổ",englishName: "basketball");
 
 List<Sport> listSport = [football, badminton, basketball];
