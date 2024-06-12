@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:itss2/models/sport-field.dart';
 
 class SportFieldCard extends StatelessWidget {
@@ -29,54 +30,56 @@ class SportFieldCard extends StatelessWidget {
             height: 10,
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Tên sân: ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Color.fromARGB(255, 252, 122, 113),
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Tên sân ',
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 252, 122, 113),
+                    ),
+                  ),
+                  Text(
+                    'Địa chỉ ',
+                    style: GoogleFonts.montserrat(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Color.fromARGB(255, 252, 122, 113),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(
-                field.name!,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Row(
-            children: [
-              const Text(
-                'Địa chỉ: ',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Color.fromARGB(255, 252, 122, 113),
-                ),
-              ),
-              const SizedBox(
+              SizedBox(
                 width: 10,
               ),
               Flexible(
-                child: Text(
-                  field.location!,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    height: 1.4,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 2,
+
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      field.name!,
+                      style: GoogleFonts.montserrat(
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      field.location!,
+                      style: GoogleFonts.montserrat(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        height: 1.4,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                    ),
+                  ],
                 ),
-              ),
+              )
             ],
           ),
           const SizedBox(
