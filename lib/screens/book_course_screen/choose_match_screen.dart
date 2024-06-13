@@ -82,7 +82,7 @@ class _ChooseMatchScreenState extends ConsumerState<ChooseMatchScreen> {
                       ? DateFormat('yyyy-MM-dd').format(date!)
                       : "Chọn ngày",
                   style: GoogleFonts.montserrat(
-                      fontSize: 17,
+                      fontSize: 20,
                       fontWeight: FontWeight.w500,
                       color: Colors.white),
                 )),

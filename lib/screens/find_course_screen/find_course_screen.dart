@@ -1,28 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:itss2/apis/get_sport_field/get_sport_field.dart';
 import 'package:itss2/models/sport-field.dart';
+import 'package:itss2/models/sport.dart';
 import 'package:itss2/widgets/atoms/buttons/primarybutton.dart';
 import 'package:itss2/widgets/organisms/app_bars/title_appbar.dart';
 import 'package:itss2/widgets/sport_field_card.dart';
 
-class FindCourseScreen extends StatefulWidget {
+class FindCourseScreen extends ConsumerStatefulWidget {
   const FindCourseScreen({super.key});
 
   @override
-  State<FindCourseScreen> createState() => _FindCourseScreenState();
+  ConsumerState<FindCourseScreen> createState() => _FindCourseScreenState();
 }
 
-class _FindCourseScreenState extends State<FindCourseScreen> {
+class _FindCourseScreenState extends ConsumerState<FindCourseScreen> {
   late String choice;
   List<SportField> sportFieldResults = <SportField>[];
-
-  List<String> listChoice = [
-    "Bóng đá",
-    "Cầu lông",
-    "Bóng rổ",
-  ];
 
   @override
   void initState() {
@@ -32,20 +29,27 @@ class _FindCourseScreenState extends State<FindCourseScreen> {
     });
   }
 
+  _fetchSportField(String sport) async {
+    final listSportField = await ref.read(getSportFieldProvider(sport).future);
+    setState(() {
+      sportFieldResults = listSportField??[];
+    });
+  }
+
   _buildBottomModal(BuildContext context) {
     List<Widget> widgets = [];
 
-    listChoice.forEach((element) {
+    listSport.forEach((element) {
       widgets.add(PrimaryButton(
           onPressed: () {
             setState(() {
-              choice = element;
+              choice = element.name!;
             });
             Navigator.pop(context);
           },
           width: MediaQuery.of(context).size.width,
           child: Text(
-            element,
+            element.name!,
             style: TextStyle(color: Colors.white, fontSize: 18.0),
           )));
       widgets.add(SizedBox(height: 5));
@@ -74,13 +78,13 @@ class _FindCourseScreenState extends State<FindCourseScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            const Text(
               "Đang tìm kiếm ...",
               style: TextStyle(color: Colors.black, fontSize: 18.0),
             ),
-            SizedBox(height: 20),
-            CircularProgressIndicator(),
-            SizedBox(
+            const SizedBox(height: 20),
+            const CircularProgressIndicator(),
+            const SizedBox(
               height: 16,
             ),
             PrimaryButton(
@@ -88,7 +92,7 @@ class _FindCourseScreenState extends State<FindCourseScreen> {
               child: Center(
                 child: Text(
                   "Hủy",
-                  style: TextStyle(color: Colors.black, fontSize: 18.0),
+                  style: GoogleFonts.montserrat(color: Colors.white, fontSize: 18.0),
                 ),
               ),
               onPressed: () {
@@ -159,7 +163,7 @@ class _FindCourseScreenState extends State<FindCourseScreen> {
                       padding: EdgeInsets.all(20),
                       icon: Icon(Icons.search),
                       color: Colors.white,
-                      onPressed: () {
+                      onPressed: () async {
                         setState(() {
                           sportFieldResults = <SportField>[];
                         });
@@ -169,9 +173,7 @@ class _FindCourseScreenState extends State<FindCourseScreen> {
 
                         Future.delayed(const Duration(seconds: 3), () {
                           Navigator.pop(context);
-                          setState(() {
-                            // sportFieldResults = listSportField;
-                          });
+                          _fetchSportField(choice == "Bóng đá" ? 'football' : choice== "Cầu lông" ? 'badminton' : 'basketball');
                         });
                       },
                       iconSize: 150, // Adjust icon size to fit inside circle

@@ -3,177 +3,165 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:itss2/screens/book_player_screen/list_player_screen.dart';
-import 'package:itss2/screens/book_player_screen/notifier/book_player_notifier.dart';
+import 'package:itss2/models/booking.dart';
+import 'package:itss2/models/sport-field.dart';
+import 'package:itss2/models/sport.dart';
+import 'package:itss2/screens/book_course_screen/choose_sport_field_screen.dart';
+import 'package:itss2/screens/book_course_screen/notifiers/book_course_notifier.dart';
+import 'package:itss2/screens/book_player_screen/choose_time_screen.dart';
+import 'package:itss2/widgets/atoms/buttons/primarybutton.dart';
+import 'package:itss2/widgets/atoms/cards/primary_card.dart';
 import 'package:itss2/widgets/organisms/app_bars/title_appbar.dart';
 
-import '../../models/sport.dart';
-import '../../widgets/atoms/buttons/primarybutton.dart';
-
 class BookPlayerScreen extends ConsumerStatefulWidget {
-  const BookPlayerScreen({super.key});
-
   @override
-  ConsumerState<BookPlayerScreen> createState() => _BookPlayerScreenState();
+  ConsumerState<BookPlayerScreen> createState() => _BookCourseScreenState();
 }
 
-class _BookPlayerScreenState extends ConsumerState<BookPlayerScreen> {
-  _buildListSportModal(BuildContext context) {
-    List<Widget> sportComponents = [];
-
-    listSport.forEach((sport) {
-      sportComponents.add(PrimaryButton(
-          onPressed: () {
-            ref.read(bookPlayerNotifierProvider.notifier).setSport(sport.name);
-            Navigator.pop(context);
-          },
-          child: Text(
-            sport.name!,
-            style: TextStyle(color: Colors.white, fontSize: 18.0),
-          )));
-      sportComponents.add(SizedBox(
-        height: 10,
-      ));
-    });
-
-    return Container(
-      height: double.infinity,
-      child: SingleChildScrollView(
-        child: Column(
-          children: sportComponents,
-        ),
-      ),
-    );
-  }
+class _BookCourseScreenState extends ConsumerState<BookPlayerScreen> {
+  Sport? sport;
 
   @override
   Widget build(BuildContext context) {
-    final bookPlayerNotifier = ref.watch(bookPlayerNotifierProvider);
     return Scaffold(
       appBar: TitleAppbar(
+          leadingButtonOnPressed: () {
+            Navigator.pop(context);
+          },
           actions: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ListPlayerScreen()));
-              },
-              child: Text(
-                "Next",
+            TextButton(
+                onPressed: () {
+                  if(sport!=null){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChooseTimeScreen(sport: sport!)));
+                  }
+                },
+                child: Text(
+                  "Tiếp tục",
+                  style: GoogleFonts.montserrat(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600),
+                ))
+          ],
+          title: Text("Đặt đối",
+              style: GoogleFonts.montserrat(
+                  textStyle: const TextStyle(
+                    fontSize: 20,fontWeight: FontWeight.w600,
+                      color: Colors.white, letterSpacing: .5)))),
+      body: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                "Chọn môn thể thao :",
                 style: GoogleFonts.montserrat(
                     fontSize: 20,
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.w600),
               ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-          ],
-          leadingButtonOnPressed: () => Navigator.pop(context),
-          title: Text("Đặt đối",
-              style: GoogleFonts.notoSans(
-                  textStyle:
-                      TextStyle(color: Colors.white, letterSpacing: .5)))),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            PrimaryButton(
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (context) => _buildListSportModal(context));
-              },
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Text(
-                  bookPlayerNotifier?.sport?? "Chọn môn thể thao",
-                  style: GoogleFonts.notoSans(
-                      textStyle: const TextStyle(
-                          color: Colors.white,
-                          letterSpacing: .5,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15))),
-            ),
-            const SizedBox(height: 5),
-            PrimaryButton(
-              onPressed: () async {
-                final date = await showDatePicker(context: context, firstDate: DateTime(2024), lastDate: DateTime(2025));
-                ref.read(bookPlayerNotifierProvider.notifier).setDate(DateFormat('yyyy-MM-dd').format(date!));
+              const SizedBox(
+                height: 10,
+              ),
+              PrimaryCard(
+                onTap: () {
+                  setState(() {
+                    sport = football;
+                  });
                 },
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Text(
-                  bookPlayerNotifier.date??
-                      "Chọn ngày",
-                  style: GoogleFonts.notoSans(
-                      textStyle: const TextStyle(
+                backGroundColor: sport == football
+                    ? Colors.teal
+                    : Theme.of(context).primaryColor,
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.sports_soccer,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Bóng đá",
+                      style: GoogleFonts.montserrat(
+                          fontSize: 20,
                           color: Colors.white,
-                          letterSpacing: .5,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15))),
-            ),
-            const SizedBox(height: 5),
-            PrimaryButton(
-              onPressed: () async {
-                final startTime = await showTimePicker(
-                    initialEntryMode: TimePickerEntryMode.dialOnly,
-                    context: context,
-                    initialTime: const TimeOfDay(hour: 0, minute: 0));
-                ref.read(bookPlayerNotifierProvider.notifier).setStartTime("${startTime!.hour}:${startTime.minute}");
-              },
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Text(
-                  bookPlayerNotifier?.startTime == null ?
-                  "Chọn thời gian bắt đầu" : bookPlayerNotifier.startTime!,
-                  style: GoogleFonts.notoSans(
-                      textStyle: const TextStyle(
+                          fontWeight: FontWeight.w600),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              PrimaryCard(
+                onTap: () {
+                  setState(() {
+                    sport = badminton;
+                  });
+                },
+                backGroundColor: sport == badminton
+                    ? Colors.teal
+                    : Theme.of(context).primaryColor,
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.sports_tennis,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Cầu lông",
+                      style: GoogleFonts.montserrat(
+                          fontSize: 20,
                           color: Colors.white,
-                          letterSpacing: .5,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15))),
-            ),
-            const SizedBox(height: 5),
-            PrimaryButton(
-              onPressed: () async {
-                final endTime = await showTimePicker(
-                    initialEntryMode: TimePickerEntryMode.dialOnly,
-                    context: context,
-                    initialTime: TimeOfDay(hour: 0, minute: 0));
-                ref.read(bookPlayerNotifierProvider.notifier).setEndTime("${endTime!.hour}:${endTime.minute}");
-              },
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Text(
-                  bookPlayerNotifier?.endTime == null ?
-                  "Chọn thời gian kết thúc" : bookPlayerNotifier.endTime!,
-                  style: GoogleFonts.notoSans(
-                      textStyle: const TextStyle(
+                          fontWeight: FontWeight.w600),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              PrimaryCard(
+                onTap: () {
+                  setState(() {
+                    sport = basketball;
+                  });
+                },
+                backGroundColor: sport == basketball
+                    ? Colors.teal
+                    : Theme.of(context).primaryColor,
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.sports_basketball,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Bóng rổ",
+                      style: GoogleFonts.montserrat(
+                          fontSize: 20,
                           color: Colors.white,
-                          letterSpacing: .5,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15))),
-            ),
-            const SizedBox(height: 5),
-            PrimaryButton(
-              // onPressed: () async {
-              //   await _buildSelectTime(context);
-              // },
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Text(
-                  bookPlayerNotifier.needField
-                      ? "Đã có sân"
-                      : "Chưa có sân",
-                  style: GoogleFonts.notoSans(
-                      textStyle: const TextStyle(
-                          color: Colors.white,
-                          letterSpacing: .5,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 15))),
-            ),
-          ],
-        ),
-      ),
+                          fontWeight: FontWeight.w600),
+                    )
+                  ],
+                ),
+              ),
+            ],
+          )),
     );
   }
 }
