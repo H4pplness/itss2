@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:itss2/apis/get_field_bookings/get_field_bookings.dart';
 import 'package:itss2/apis/get_match_by_field/get_match_by_field.dart';
 import 'package:itss2/widgets/atoms/cards/primary_card.dart';
 import '../../models/match.dart';
@@ -44,9 +45,17 @@ class _ChooseMatchScreenState extends ConsumerState<ChooseMatchScreen> {
           TextButton(
               onPressed: () async {
                 if (match != null && date != null) {
-                  await ref.read(bookFieldProvider(BookFieldData(
+                  final newBooking = BookFieldData(
                       matchId: match!.id,
-                      date: DateFormat('yyyy-MM-dd').format(date!))));
+                      date: DateFormat('yyyy-MM-dd').format(date!));
+                  await ref.read(bookFieldProvider(newBooking));
+                  ref.read(bookingNotifierProvider.notifier).addBooking(
+                      GetFieldBookingDTO(
+                          date: DateFormat('yyyy-MM-dd').format(date!),
+                          startTime: match!.startTime,
+                          endTime: match!.endTime,
+                          fieldName: match!.fieldName,
+                          location: widget.sportField.location));
                   Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.pop(context);
@@ -96,12 +105,15 @@ class _ChooseMatchScreenState extends ConsumerState<ChooseMatchScreen> {
                     .map((getMatch) => Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: PrimaryCard(
-                            backGroundColor: (match!=null && getMatch.id == match!.id!) ?Colors.teal[200] : Theme.of(context).primaryColor,
-                            onTap: (){
-                              setState(() {
-                                match = getMatch;
-                              });
-                            },
+                              backGroundColor:
+                                  (match != null && getMatch.id == match!.id!)
+                                      ? Colors.teal[200]
+                                      : Theme.of(context).primaryColor,
+                              onTap: () {
+                                setState(() {
+                                  match = getMatch;
+                                });
+                              },
                               width: MediaQuery.of(context).size.width - 40,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

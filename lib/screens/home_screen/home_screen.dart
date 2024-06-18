@@ -14,12 +14,16 @@ import 'package:itss2/screens/home_screen/tabs/home_tab.dart';
 import 'package:itss2/widgets/atoms/cards/primary_card.dart';
 import 'package:itss2/widgets/organisms/app_bars/home_page_appbar.dart';
 
+import '../../apis/get_field_bookings/get_field_bookings.dart';
+import '../../apis/get_invitations/get_invitations.dart';
+import '../../apis/get_my_booking_player/get_my_booking_player.dart';
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    final List<Widget> tabs =[
+  Widget build(BuildContext context, WidgetRef ref) {
+    final List<Widget> tabs = [
       HomeTab(),
       BookFieldTab(),
       BookPlayerTab(),
@@ -31,38 +35,38 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
         appBar: HomePageAppbar(),
         body: tabs[index],
-      bottomNavigationBar: BottomNavigationBar(
-      currentIndex: index,
-      onTap: (index) =>
-          ref.read(tabIndexNotifierProvider.notifier).setIndex(index),
-      backgroundColor: Theme.of(context).colorScheme.background,
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: Theme.of(context).primaryColor,
-      unselectedItemColor: Theme.of(context).iconTheme.color,
-      selectedFontSize: 12,
-      selectedIconTheme: const IconThemeData(size: 27, opticalSize: 1),
-      unselectedIconTheme: const IconThemeData(opticalSize: 1, size: 27),
-      items: const [
-        BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home,
-            ),
-            label: "Home"),
-        BottomNavigationBarItem(
-            icon: Icon(
-              Icons.sports_soccer,
-            ),
-            label: "Đặt sân"),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.people),
-            label : "Đặt đối"
-        ),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label : "Tìm sân"
-        ),
-      ],
-    )
-    );
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: index,
+          onTap: (index) {
+            ref.read(tabIndexNotifierProvider.notifier).setIndex(index);
+            if (index == 1) ref.refresh(bookingNotifierProvider);
+            if (index == 2) {
+              ref.refresh(invitationNotifierProvider);
+              ref.refresh(myBookingPlayerNotifierProvider);
+            }
+            ;
+          },
+          backgroundColor: Theme.of(context).colorScheme.background,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Theme.of(context).primaryColor,
+          unselectedItemColor: Theme.of(context).iconTheme.color,
+          selectedFontSize: 12,
+          selectedIconTheme: const IconThemeData(size: 27, opticalSize: 1),
+          unselectedIconTheme: const IconThemeData(opticalSize: 1, size: 27),
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.home,
+                ),
+                label: "Home"),
+            BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.sports_soccer,
+                ),
+                label: "Đặt sân"),
+            BottomNavigationBarItem(icon: Icon(Icons.people), label: "Đặt đối"),
+            BottomNavigationBarItem(icon: Icon(Icons.search), label: "Tìm sân"),
+          ],
+        ));
   }
 }

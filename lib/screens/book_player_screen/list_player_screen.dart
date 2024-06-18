@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:itss2/apis/create_booking_player/create_booking_player.dart';
 import 'package:itss2/apis/get_booking_player/get_booking_player.dart';
+import 'package:itss2/apis/get_my_booking_player/get_my_booking_player.dart';
 import 'package:itss2/apis/invite_user/invite_user.dart';
 import 'package:itss2/widgets/atoms/cards/invite_card.dart';
 import 'package:itss2/widgets/organisms/app_bars/title_appbar.dart';
@@ -44,6 +45,13 @@ class ListPlayerScreen extends ConsumerWidget {
                           startTime: startTime,
                           endTime: endTime,
                           sport: sport.englishName)));
+                  ref
+                      .read(myBookingPlayerNotifierProvider.notifier)
+                      .addBookingPlayer(GetMyBookingPlayerDTO(
+                          date: DateFormat('yyyy-MM-dd').format(date),
+                          start_time: startTime,
+                          end_time: endTime,
+                          sport: sport.englishName));
                   Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.pop(context);
@@ -78,9 +86,10 @@ class ListPlayerScreen extends ConsumerWidget {
                     child: Column(
                         children: listPlayer
                             .map((player) => InviteCard(
-                          onPressed: () async{
-                            await ref.read(inviteUserProvider(player.bookingPlayerId));
-                          },
+                                onPressed: () async {
+                                  await ref.read(inviteUserProvider(
+                                      player.bookingPlayerId));
+                                },
                                 name: player.username!,
                                 startTime: player.startTime!,
                                 endTime: player.endTime!,

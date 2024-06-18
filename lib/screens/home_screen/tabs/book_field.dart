@@ -11,13 +11,13 @@ class BookFieldTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bookings = ref.watch(getFieldBookingProvider);
+    final bookings = ref.watch(bookingNotifierProvider);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20),
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             PrimaryCard(
@@ -43,56 +43,47 @@ class BookFieldTab extends ConsumerWidget {
                             color: Colors.white))
                   ],
                 )),
-            bookings.when(
-                data: (bookings) {
-                  return Column(
-                    children: bookings!
-                        .map((booking) => Container(
-                              margin: const EdgeInsets.only(top: 10),
-                              width: MediaQuery.of(context).size.width - 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    booking.fieldName!,
-                                    style: GoogleFonts.montserrat(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.white),
-                                  ),
-                                  Text(booking.location!,
-                                      style: GoogleFonts.montserrat(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white)),
-                                  Text(
-                                      "${booking.startTime} - ${booking.endTime}",
-                                      style: GoogleFonts.montserrat(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white)),
-                                  Text(booking.date!,
-                                      style: GoogleFonts.montserrat(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500,
-                                          color: Colors.white))
-                                ],
-                              ),
-                            ))
-                        .toList(),
-                  );
-                },
-                error: (error, __) {
-                  print(error);
-                  return Container();
-                },
-                loading: () => Container())
+            Column(
+              children: bookings!
+                  .map((booking) => Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        width: MediaQuery.of(context).size.width - 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              booking.fieldName!,
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white),
+                            ),
+                            Text(booking.location!,
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white)),
+                            Text("${booking.startTime} - ${booking.endTime}",
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white)),
+                            Text(booking.date!,
+                                style: GoogleFonts.montserrat(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white))
+                          ],
+                        ),
+                      ))
+                  .toList(),
+            )
           ],
         ),
       ),

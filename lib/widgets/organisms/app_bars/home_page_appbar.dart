@@ -1,20 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:itss2/screens/get_location_screen/get_location_screen.dart';
 import 'package:itss2/screens/login_screen/login_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HomePageAppbar extends StatefulWidget implements PreferredSizeWidget {
+import '../../../screens/home_screen/tab_index/tab_index_notifier.dart';
+
+class HomePageAppbar extends ConsumerStatefulWidget
+    implements PreferredSizeWidget {
   @override
-  State<HomePageAppbar> createState() => _HomePageAppbarState();
+  ConsumerState<HomePageAppbar> createState() => _HomePageAppbarState();
 
   @override
   // TODO: implement preferredSize
   Size get preferredSize => const Size.fromHeight(100);
 }
 
-class _HomePageAppbarState extends State<HomePageAppbar> {
+class _HomePageAppbarState extends ConsumerState<HomePageAppbar> {
   late Position currentPosition;
 
   Future<void> _openMap(double latitude, double longitude) async {
@@ -44,8 +48,12 @@ class _HomePageAppbarState extends State<HomePageAppbar> {
       leading: Container(),
       actions: [
         IconButton(
-            onPressed: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const LoginScreen())),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()));
+              print("LOGOUT");
+              ref.read(tabIndexNotifierProvider.notifier).setIndex(0);
+            },
             icon: const Icon(
               Icons.logout,
               color: Colors.white,
